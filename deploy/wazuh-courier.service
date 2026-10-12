@@ -1,0 +1,12 @@
+[Unit]
+Description=Wazuh alert forwarder
+After=wazuh-manager.service
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/forwarder.py
+Restart=always
+User=root
+Environment=AWS_REGION=us-east-1
+
+[Install]
+WantedBy=multi-user.target

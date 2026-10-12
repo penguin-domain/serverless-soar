@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Serverless SOC | Dhruv Umesh Talegaonkar</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05070d;--pn:#0b101c;--ln:#1c2a40;--tx:#dbe6f5;--mu:#7f93b0;--cy:#3ee6ff;--gr:#4dff9a;--vi:#9b7bff;--rd:#ff4d6d;--am:#ffc14d;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 16px/1.65 "Space Grotesk",system-ui,sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);overflow-x:hidden}
+canvas#bg{position:fixed;inset:0;z-index:-1;width:100%;height:100%}
+.m{font-family:"JetBrains Mono",ui-monospace,monospace}
+.w{max-width:1040px;margin:auto;padding:0 20px}
+header{position:sticky;top:0;z-index:9;background:#05070dd9;backdrop-filter:blur(10px);border-bottom:1px solid var(--ln)}
+header .w{display:flex;justify-content:space-between;align-items:center;height:52px;font-size:13px}
+.st{display:flex;gap:8px;align-items:center;color:var(--gr)}
+.st i{width:8px;height:8px;border-radius:50%;background:var(--gr);box-shadow:0 0 10px var(--gr);animation:p 2s infinite}
+@keyframes p{50%{opacity:.3}}
+header nav{display:flex;gap:18px;color:var(--mu)}header a{color:inherit;text-decoration:none}header a:hover{color:var(--cy)}
+.hero{padding:84px 0 40px}
+.tags span{display:inline-block;border:1px solid var(--ln);color:var(--cy);padding:2px 12px;border-radius:20px;font-size:13px;margin:0 8px 8px 0}
+h1{font-size:clamp(34px,6.2vw,68px);line-height:1.04;margin:14px 0;font-weight:700;letter-spacing:-.02em;background:linear-gradient(100deg,#fff,#9fd9ff 55%,var(--vi));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:clamp(17px,2.4vw,22px);color:var(--mu);max-width:60ch}
+.term{margin-top:26px;font-size:14px;color:var(--gr);min-height:24px}
+.term:after{content:"▍";animation:p 1s infinite}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:34px}
+.kpi div{background:var(--pn);border:1px solid var(--ln);border-radius:12px;padding:14px 16px}
+.kpi b{display:block;font-size:30px;color:var(--cy);font-weight:600}
+.kpi span{color:var(--mu);font-size:13px}
+section{padding:70px 0}
+h2{font-size:clamp(26px,4vw,38px);margin:0 0 8px;letter-spacing:-.01em}
+.lead{color:var(--mu);max-width:68ch;margin:0 0 28px}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:14px;padding:20px}
+.sum{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.sum ul{margin:0;padding:0;list-style:none;display:grid;gap:10px;font-size:15px}
+.sum li{padding-left:18px;position:relative;color:#c5d3e8}.sum li:before{content:"";position:absolute;left:0;top:10px;width:8px;height:8px;border-radius:2px;background:var(--gr)}
+.fl{overflow-x:auto;padding:6px 0}
+svg{min-width:860px;width:100%;display:block}
+.nd{cursor:pointer}.nd rect{fill:var(--pn);stroke:var(--ln);stroke-width:1.5;transition:.25s}
+.nd:hover rect,.nd:focus rect,.nd.on rect{stroke:var(--cy);fill:#0f1a2c;filter:drop-shadow(0 0 8px #3ee6ff88)}
+.nd text{fill:var(--tx);font:600 13px "JetBrains Mono",monospace;text-anchor:middle;pointer-events:none}
+.nd .s{fill:var(--mu);font-weight:400;font-size:11px}
+.ed{stroke:#2b3d5c;stroke-width:1.5;fill:none}.ed.d{stroke-dasharray:4 4;stroke:#6b3040}
+.dt{fill:var(--cy)}.dt.r{fill:var(--rd)}
+#info{margin-top:12px;min-height:92px;border-left:3px solid var(--cy)}
+#info h3{margin:0 0 4px;font-size:18px;color:var(--cy)}#info p{margin:0;color:#c5d3e8;font-size:15px}
+.sim{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
+.log{background:#03050a;border:1px solid var(--ln);border-radius:14px;padding:16px;height:380px;overflow:auto;font-size:13px;line-height:1.7}
+.log div{animation:in .3s}@keyframes in{from{opacity:0;transform:translateX(-6px)}}
+.t{color:var(--mu)}.i{color:var(--cy)}.o{color:var(--gr)}.e{color:var(--rd)}.a{color:var(--am)}
+.btn{background:linear-gradient(90deg,#1b8cff,var(--vi));color:#fff;border:0;border-radius:10px;padding:11px 20px;font:600 15px "Space Grotesk",sans-serif;cursor:pointer;width:100%}
+.btn:disabled{opacity:.5;cursor:wait}
+button:focus-visible,.nd:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.gauge{margin:14px 0}.gauge label{display:flex;justify-content:space-between;font-size:13px;color:var(--mu);margin-bottom:5px}
+.bar{height:10px;border-radius:6px;background:#12203a;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cy),var(--vi));transition:width .5s}
+.slots{display:flex;gap:8px}.slots b{flex:1;height:28px;border-radius:8px;border:1px solid var(--ln);display:grid;place-items:center;font-size:12px;color:var(--mu);transition:.3s}
+.slots b.on{background:#3ee6ff22;border-color:var(--cy);color:var(--cy)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tab{background:var(--pn);border:1px solid var(--ln);color:var(--tx);border-radius:30px;padding:7px 18px;font:inherit;cursor:pointer}
+.tab[aria-selected=true]{border-color:var(--cy);color:var(--cy);background:#3ee6ff14}
+.pr{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pr h4{margin:0 0 6px;font-size:13px;letter-spacing:.04em}.pr p{margin:0;font-size:15px;color:#c5d3e8}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.g3 h3{margin:0 0 6px;font-size:17px}.g3 p{margin:0;color:var(--mu);font-size:15px}
+pre{margin:0;overflow-x:auto;font-size:13px;line-height:1.7;color:#c5d3e8}.k{color:var(--vi)}.c{color:#5d7394}.s2{color:var(--gr)}
+footer{border-top:1px solid var(--ln);padding:34px 0;color:var(--mu);font-size:13px}
+footer b{color:var(--tx);font-size:15px;font-weight:500}
+.rv{opacity:0;transform:translateY(24px);transition:.8s cubic-bezier(.2,.8,.2,1)}.rv.on{opacity:1;transform:none}
+@media(max-width:760px){.sum,.sim,.pr{grid-template-columns:1fr}header nav{display:none}.hero{padding-top:48px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+.dots{display:grid;grid-template-columns:repeat(10,1fr);gap:8px}.dots i{font:600 12px "JetBrains Mono",monospace;font-style:normal;height:36px;border-radius:8px;display:grid;place-items:center;border:1px solid var(--ln);color:var(--mu);transition:.3s}
+.dots i.q{border-color:var(--am);color:var(--am)}.dots i.x{background:#ff4d6d22;border-color:var(--rd);color:var(--rd)}.dots i.k{background:#4dff9a22;border-color:var(--gr);color:var(--gr)}
+.qs{display:flex;gap:16px;align-items:center;margin-top:16px;flex-wrap:wrap}.qs p{margin:0;flex:1;min-width:240px;color:#c5d3e8;font-size:15px}.qs .btn{width:auto}
+</style></head><body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<header><div class="w m"><div class="st"><i></i>SOC.PIPELINE: ACTIVE</div><nav><a href="#arch">Architecture</a><a href="#queue">Queue upgrade</a><a href="#sim">Simulated replay</a><a href="#res">Resilience</a><a href="#sec">Security design</a></nav></div></header>
+<main>
+<div class="w hero">
+<div class="tags m"><span>AI</span><span>Cybersecurity</span><span>AWS Serverless</span><span>SOAR</span></div>
+<h1>Autonomous Serverless Security Operations Center</h1>
+<p class="sub">An event-driven SOC that detects, triages with AI and quarantines attackers at the VPC perimeter, on a strict $0 infrastructure budget.</p>
+<div class="term m" id="term"></div>
+<div class="kpi">
+<div><b data-n="0" data-p="$">0</b><span>infrastructure spend</span></div>
+<div><b data-n="200" data-p="&lt;" data-s="MB">0</b><span>RAM for the Wazuh manager</span></div>
+<div><b data-n="10" data-p="~" data-s="s">0</b><span>AI triage per alert, ~55 MB Lambda RAM</span></div>
+<div><b data-n="2" data-s=" max">0</b><span>Lambda concurrency (rate shield)</span></div>
+<div><b data-n="0" data-s=" keys">0</b><span>static AWS keys on any host</span></div>
+</div></div>
+
+<section class="w rv"><h2>Executive summary</h2><p class="lead">Built end to end as a solo architect: design, deployment, failure analysis and hardening.</p>
+<div class="sum"><div class="card"><p style="margin-top:0">Edge telemetry ingestion is decoupled from AI inference through Amazon SQS, so intrusion bursts are absorbed asynchronously instead of exhausting upstream API quotas. Google Gemini 3.8 Flash performs Tier-2 triage and maps threats to MITRE ATT&amp;CK. On a confirmed true positive, a Boto3 call injects a VPC Network ACL deny rule within seconds, guarded by state tracking so the same attacker never triggers duplicate rule changes.</p><p style="margin-bottom:0">Every component runs under least-privilege IAM Instance Profiles.</p></div>
+<div class="card"><ul><li>Ingestion and compute fully decoupled</li><li>AI triage mapped to MITRE ATT&amp;CK</li><li>Idempotent automated containment</li><li>Dead-letter queue for poison-pill events</li><li>Retry matrix with exponential backoff</li></ul></div></div></section>
+
+<section class="w rv" id="arch"><h2>Pipeline architecture</h2><p class="lead">Select any component. Cyan packets show normal flow; the red path is the failure route.</p>
+<div class="card"><div class="fl"><svg viewBox="0 0 900 230" id="fx" role="group" aria-label="Pipeline diagram"></svg></div></div>
+<div class="card" id="info" aria-live="polite"><h3>Pick a component</h3><p>Each node explains its role and the design decision behind it.</p></div></section>
+
+<section class="w rv" id="queue"><h2>Queue upgrade: from direct invoke to an SQS buffer</h2><p class="lead">Version one wired EventBridge straight into Lambda. A brute-force burst started many Lambdas at once, which hit the Gemini free-tier limits (HTTP 429) and dropped alerts. Inserting SQS between them fixed it. Try both versions below (illustrative replay).</p>
+<div class="tabs"><button class="tab" id="mb" aria-selected="true">Before: direct invoke</button><button class="tab" id="ma" aria-selected="false">After: SQS buffer</button></div>
+<div class="card"><div class="dots" id="dots" aria-hidden="true"></div><div class="qs"><p id="qt" aria-live="polite"></p><button class="btn" id="burst">Send a burst of 20 alerts</button></div></div>
+<div class="g3" style="margin-top:14px">
+<div class="card"><h3>Burst control</h3><p>The queue holds the spike. Lambda drains it at a fixed concurrency of 2 instead of fanning out.</p></div>
+<div class="card"><h3>Quota safety</h3><p>Outbound Gemini calls are metered, so the 5 requests-per-minute free tier is no longer blown by a storm.</p></div>
+<div class="card"><h3>Failure handling</h3><p>Failed messages are retried, and poison-pill events move to a dead-letter queue instead of looping forever.</p></div>
+<div class="card"><h3>Delivery</h3><p>Each confirmed incident ends with a Slack webhook briefing, so the response is visible without opening AWS.</p></div></div></section>
+
+<section class="w rv" id="sim"><h2>Run the attack (simulated replay)</h2><p class="lead">This is a scripted animation, not live output. Replay an SSH brute-force burst through the pipeline and watch the queue, concurrency limit and containment logic respond.</p>
+<div class="sim"><div class="log m" id="log" aria-live="polite"><div class="t">// idle. press the button to start the simulation</div></div>
+<div class="card"><button class="btn" id="go">Simulate SSH brute-force</button>
+<div class="gauge"><label><span>SQS queue depth</span><span id="qv">0</span></label><div class="bar"><i id="qb"></i></div></div>
+<div class="gauge"><label><span>Lambda concurrency (max 2)</span></label><div class="slots"><b id="s1">idle</b><b id="s2">idle</b></div></div>
+<div class="gauge"><label><span>NACL rule #50</span><span id="nv">not set</span></label><div class="bar"><i id="nb" style="background:var(--rd)"></i></div></div>
+<div class="gauge"><label><span>Dropped alerts</span><span id="dv" style="color:var(--gr)">0</span></label></div></div></div></section>
+
+<section class="w rv" id="res"><h2>Resilience engineering</h2><p class="lead">Three production failures, how each was diagnosed and the design change that closed it.</p>
+<div class="tabs" role="tablist" id="tabs"></div><div class="card"><div class="pr" id="pr"></div></div></section>
+
+<section class="w rv" id="sec"><h2>Security design decisions</h2><p class="lead">What keeps it safe to run with nobody watching.</p>
+<div class="g3">
+<div class="card"><h3>No static AWS keys</h3><p>The edge host uses an IAM Instance Profile (events:PutEvents only) and Lambda uses a scoped execution role. The only third-party secrets are the Gemini API key (triage) and the Slack webhook URL (alerts).</p></div>
+<div class="card"><h3>Least privilege</h3><p>Lambda may change only the NACL rule it owns, read its queue and write its logs. Nothing broader.</p></div>
+<div class="card"><h3>Idempotent response</h3><p>State tracking checks for an existing deny rule before creating one, which prevents duplicate calls and rule-table thrashing.</p></div>
+<div class="card"><h3>Failure isolation</h3><p>SQS buffer, DLQ for poison pills and bounded concurrency keep one noisy source from taking down triage.</p></div>
+<div class="card"><h3>Signal over noise</h3><p>The forwarder keeps only Level 7+ alerts, which cuts LLM calls.</p></div>
+<div class="card"><h3>Sanitised evidence</h3><p>Adversary IPs are redacted from all documentation and demos.</p></div>
+<div class="card"><h3>Hardened host</h3><p>No root account use, a dedicated IAM deployment user, RSA SSH key login, and inbound EC2 traffic limited to HTTPS (443).</p></div></div>
+<div class="card" style="margin-top:16px"><div class="m" style="color:var(--mu);font-size:12px;margin-bottom:8px">Simplified excerpt: how the Lambda handler decides and acts</div>
+<pre class="m"><span class="k">def</span> lambda_handler(event, context):
+    <span class="k">for</span> rec <span class="k">in</span> event[<span class="s2">"Records"</span>]:
+        alert = json.loads(rec[<span class="s2">"body"</span>])[<span class="s2">"detail"</span>]
+        verdict = ask_gemini(alert)
+        <span class="k">if</span> verdict[<span class="s2">"classification"</span>] != <span class="s2">"TRUE_POSITIVE"</span>:
+            <span class="k">continue</span>
+        ip = alert[<span class="s2">"data"</span>][<span class="s2">"srcip"</span>]
+        <span class="k">if</span> already_blocked(ip):
+            print(f<span class="s2">"ALREADY BLOCKED {ip}, skipping"</span>)
+            <span class="k">continue</span>
+        block_ip(ip)            <span class="c"># NACL inbound DENY, rule #50</span>
+        notify_chatops(alert, verdict)
+
+<span class="k">def</span> ask_gemini(alert, tries=4):
+    <span class="k">for</span> n <span class="k">in</span> range(tries):
+        <span class="k">try</span>:
+            <span class="k">with</span> urllib.request.urlopen(build_req(alert), timeout=12) <span class="k">as</span> r:
+                <span class="k">return</span> parse(r.read())
+        <span class="k">except</span> (urllib.error.HTTPError, TimeoutError):
+            time.sleep(2 ** n)  <span class="c"># exponential backoff</span>
+    <span class="k">raise</span> RuntimeError(<span class="s2">"gemini unavailable"</span>)  <span class="c"># message returns to SQS, then DLQ</span>
+</pre></div></section>
+</main>
+<footer><div class="w"><p class="m" style="color:var(--am)">Security notice: external adversary addresses are sanitised ([REDACTED_IP]). No AWS credentials are hardcoded anywhere in this project.</p><b>Architected by Dhruv Umesh Talegaonkar</b></div></footer>
+<script>
+const $=id=>document.getElementById(id),sl=ms=>new Promise(r=>setTimeout(r,ms));
+// background network
+(()=>{const c=$("bg"),x=c.getContext("2d");let W,H,P=[];const R=()=>{W=c.width=innerWidth;H=c.height=innerHeight;P=Array.from({length:Math.min(70,W/18|0)},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3}))};R();addEventListener("resize",R);
+const still=matchMedia("(prefers-reduced-motion:reduce)").matches;
+(function f(){x.clearRect(0,0,W,H);P.forEach((p,i)=>{if(!still){p.x=(p.x+p.vx+W)%W;p.y=(p.y+p.vy+H)%H}x.fillStyle="#3ee6ff55";x.fillRect(p.x,p.y,2,2);for(let j=i+1;j<P.length;j++){const q=P[j],d=Math.hypot(p.x-q.x,p.y-q.y);if(d<130){x.strokeStyle=`rgba(62,230,255,${.12*(1-d/130)})`;x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.stroke()}}});if(!still)requestAnimationFrame(f)})()})();
+// typed line + counters
+(async()=>{const t="$ detect → queue → triage → contain  [0 dollars, 0 static AWS keys]";for(const ch of t){$("term").insertAdjacentText("beforeend",ch);await sl(28)}})();
+const cnt=e=>{const n=+e.dataset.n,p=e.dataset.p||"",s=e.dataset.s||"";let k=0;const id=setInterval(()=>{k=Math.min(n,k+Math.max(1,n/40|0));e.textContent=p.replace("&lt;","<")+k+s;if(k>=n)clearInterval(id)},30)};
+document.querySelectorAll("[data-n]").forEach(cnt);
+// reveal
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("on");io.unobserve(e.target)}}),{threshold:.08});document.querySelectorAll(".rv").forEach(e=>io.observe(e));
+// diagram
+const N=[["wz","Wazuh manager","t2.micro, headless",20,60,"Lean edge ingestion","Headless Wazuh C-core daemons on a t2.micro. The UI and indexing engine were removed to stay under 200 MB RAM. forwarder.py drops low-level noise and forwards Level 7+ alerts. Auth uses an IAM Instance Profile, no static keys."],
+["eb","EventBridge","event bus",170,60,"Event routing","Receives alerts from the edge and routes them. Routing to a queue instead of directly to Lambda is the key decoupling decision."],
+["sq","Amazon SQS","siem-alert-queue",320,60,"Buffer and shock absorber","Absorbs brute-force bursts so Lambda can drain at a controlled pace. Failed messages move to the dead-letter queue after retries."],
+["lm","AWS Lambda","max concurrency 2",470,60,"Serverless triage","Zero-dependency Python using urllib.request. Concurrency capped at 2 to meter outbound LLM calls. 12 s socket timeout, 60 s execution ceiling, exponential backoff."],
+["ai","Gemini Flash","Tier-2 triage",620,60,"AI classification","Called through generateContent (v1beta). Classifies true or false positive and maps to MITRE ATT&CK, for example Credential Access T1110.001."],
+["na","VPC NACL","deny rules 50-99",770,60,"Autonomous containment","On a true positive, Boto3 inserts an inbound DENY rule and posts the incident briefing to Slack through an incoming webhook (tested and working). State tracking makes it idempotent."],
+["dq","Dead-letter queue","poison pills",320,160,"DLQ","Unprocessable events are parked here for inspection, so one bad message never blocks the pipeline."]];
+(()=>{const s=$("fx");let h="";const ed=(a,b,c="")=>`<path class="ed ${c}" id="e${a}" d="M${a},88 L${b},88"/>`;
+[[130,170],[280,320],[430,470],[580,620],[730,770]].forEach(([a,b],i)=>h+=`<path class="ed" id="p${i}" d="M${a},88 L${b},88"/>`);
+h+=`<path class="ed d" id="pd" d="M375,116 L375,160"/>`;
+for(let i=0;i<5;i++)h+=`<circle class="dt" r="4"><animateMotion dur="1.6s" begin="${i*.3}s" repeatCount="indefinite"><mpath href="#p${i}"/></animateMotion></circle>`;
+h+=`<circle class="dt r" r="4"><animateMotion dur="2s" repeatCount="indefinite"><mpath href="#pd"/></animateMotion></circle>`;
+N.forEach(n=>h+=`<g class="nd" tabindex="0" role="button" data-k="${n[0]}"><rect x="${n[3]}" y="${n[4]}" width="110" height="56" rx="10"/><text x="${n[3]+55}" y="${n[4]+24}">${n[1]}</text><text class="s" x="${n[3]+55}" y="${n[4]+42}">${n[2]}</text></g>`);
+s.innerHTML=h;s.querySelectorAll(".nd").forEach(g=>{const f=()=>{const n=N.find(x=>x[0]==g.dataset.k);s.querySelectorAll(".nd").forEach(e=>e.classList.remove("on"));g.classList.add("on");$("info").innerHTML=`<h3>${n[5]}</h3><p>${n[6]}</p>`};g.onclick=f;g.onkeydown=e=>{if(e.key=="Enter"||e.key==" "){e.preventDefault();f()}}})})();
+// simulation
+let run=0;
+$("go").onclick=async()=>{if(run)return;run=1;$("go").disabled=true;const L=$("log");L.innerHTML="";
+const lg=(c,t)=>{L.insertAdjacentHTML("beforeend",`<div class="${c}">${t}</div>`);L.scrollTop=L.scrollHeight};
+const q=n=>{$("qv").textContent=n;$("qb").style.width=Math.min(100,n*2.5)+"%"};
+const sw=(a,b)=>{[["s1",a],["s2",b]].forEach(([i,v])=>{const e=$(i);e.textContent=v?"busy":"idle";e.classList.toggle("on",!!v)})};
+q(0);sw(0,0);$("nv").textContent="not set";$("nb").style.width="0";$("dv").textContent="0";
+lg("t","00:00.0 wazuh      sshd: failed login x40 from [REDACTED_IP]");await sl(700);
+lg("i","00:00.8 forwarder  correlated rule 5712 (brute-force). 39 low-level events dropped");await sl(800);
+lg("i","00:01.0 eventbridge routing to siem-alert-queue");
+for(let n=0;n<=16;n+=4){q(n);await sl(180)}
+lg("a","00:01.4 sqs        burst absorbed, depth=16. Lambda reads at max concurrency 2");sw(1,1);await sl(900);
+lg("t","00:02.4 lambda     calling Gemini (socket timeout 12s)");await sl(700);
+lg("e","00:03.1 gemini     HTTP 503 model high demand");await sl(600);
+lg("a","00:03.2 lambda     retry 1 after 2s backoff");await sl(900);
+lg("o","00:05.3 gemini     200 OK: TRUE_POSITIVE, MITRE T1110.001 Credential Access");
+for(let n=16;n>=0;n-=4){q(n);await sl(150)}sw(0,0);await sl(500);
+lg("i","00:06.0 soar       describe_network_acls: no existing deny for source");await sl(600);
+lg("o","00:06.4 soar       NACL inbound DENY rule #50 created");$("nv").textContent="DENY active";$("nb").style.width="100%";await sl(700);
+lg("o","00:06.9 slack      webhook 200 OK: incident briefing with MITRE T1110.001 delivered");await sl(900);
+lg("a","00:08.0 wazuh      duplicate alert from same source");sw(1,0);await sl(700);
+lg("o","00:08.5 soar       idempotency check: rule exists, skipped. No duplicate API call");sw(0,0);await sl(600);
+lg("o","00:09.0 summary    1 attacker contained, 0 alerts dropped, 0 quota errors");
+run=0;$("go").disabled=false};
+// resilience
+const F=[["OOM crashes","Resource limit","The all-in-one Wazuh stack with OpenSearch caused heavy swap thrashing and repeatedly crashed the free-tier instance.","Dropped the UI and indexing engine. Deployed only the headless manager (C-core daemons).","Raw security journals processed in under 200 MB RAM. Telemetry fidelity kept, $0 budget kept."],
+["Quota exhaustion","HTTP 429","SSH brute-force bursts spawned concurrent Lambdas that burned the free-tier AI limits (5 requests per minute, 20 per day) and dropped critical alerts.","SQS between EventBridge and Lambda, concurrency capped at 2, forwarder limited to Level 7+, DLQ for poison pills.","The pipeline absorbs high-density storms without losing alerts or breaching quota."],
+["Socket timeouts","HTTP 503","Upstream capacity issues made urllib.request hang 25+ seconds. The code missed TimeoutError, so Lambda crashed without retrying.","Retry matrix with exponential backoff, 12 s socket timeout to retry eagerly, 60 s Lambda ceiling, explicit timeout handling.","Triage recovers on its own during transient provider outages."]];
+$("tabs").innerHTML=F.map((f,i)=>`<button class="tab" role="tab" aria-selected="${!i}" data-i="${i}">${f[0]}</button>`).join("");
+const sh=i=>{$("pr").innerHTML=[["PROBLEM","var(--rd)",F[i][2]],["FIX","var(--cy)",F[i][3]],["RESULT","var(--gr)",F[i][4]]].map(a=>`<div><h4 class="m" style="color:${a[1]}">${a[0]} · ${F[i][1]}</h4><p>${a[2]}</p></div>`).join("");document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.i==i))};
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>sh(+t.dataset.i));sh(0);
+// queue upgrade demo
+let qm=0,busy=0;const T0="Direct invoke: every alert starts its own Lambda. Press the button to replay a burst.",T1="SQS buffer: alerts wait in the queue and Lambda drains them 2 at a time. Press the button to replay a burst.";
+const rs=()=>{$("dots").innerHTML=Array.from({length:20},(_,i)=>`<i>${i+1}</i>`).join("");$("qt").textContent=qm?T1:T0},dd=()=>[...document.querySelectorAll("#dots i")];
+const setm=m=>{if(busy)return;qm=m;$("mb").setAttribute("aria-selected",!m);$("ma").setAttribute("aria-selected",!!m);rs()};
+$("mb").onclick=()=>setm(0);$("ma").onclick=()=>setm(1);rs();
+$("burst").onclick=async()=>{if(busy)return;busy=1;$("burst").disabled=true;rs();const d=dd();
+if(!qm){d.forEach((e,i)=>e.className=i<5?"k":"x");$("qt").textContent="All 20 Lambdas fire together. Only 5 calls fit the free-tier limit, so 15 get HTTP 429 and those alerts are lost."}
+else{d.forEach(e=>e.className="q");$("qt").textContent="20 alerts buffered. Draining at concurrency 2...";for(let i=0;i<20;i+=2){await sl(380);d[i].className="k";d[i+1].className="k"}$("qt").textContent="All 20 processed in order. 0 dropped, 0 quota errors."}
+busy=0;$("burst").disabled=false};
+</script></body></html>
